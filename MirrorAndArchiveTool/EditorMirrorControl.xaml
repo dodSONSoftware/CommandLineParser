@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="MirrorAndArchiveTool.EditorMirrorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="500">
+    <StackPanel>
+        <StackPanel.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Width" Value="80"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+            </Style>
+            <Style x:Key="HelpTextFormat" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="ForestGreen"/>
+            </Style>
+        </StackPanel.Resources>
+
+        <TextBlock Style="{StaticResource HelpTextFormat}" TextWrapping="WrapWithOverflow"
+                   Margin="0,0,10,0" Height="50">When executed, the Mirror Job will make the mirror path a "mirror" of the source path by copying new files and directories, updating out-of-date files, and removing files and directories as necessary to, and from, the mirror path</TextBlock>
+        <TextBlock Text="Source Path"/>
+        <TextBox Text="{Binding Job.SourcePath}" TextChanged="textBox_TextChanged" Tag="Source"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="browse..." Click="buttonSourcePathBrowse"/>
+            <Button Content="open" Margin="5,0"
+                                Click="buttonSourcePathOpen"/>
+        </StackPanel>
+
+        <TextBlock Text="Mirror Path"/>
+        <TextBox Text="{Binding Job.MirrorPath}" TextChanged="textBox_TextChanged" Tag="Mirror"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="browse..." Click="buttonDestinationPathBrowse"/>
+            <Button Content="open" Margin="5,0"
+                                Click="buttonDestinationPathOpen"/>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,428 @@
+﻿<Window x:Class="MirrorAndArchiveTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MirrorAndArchiveTool"
+        xmlns:converters="clr-namespace:MirrorAndArchiveTool.ValueConverters"
+        Width="1000" Height="700" 
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing" Loaded="Window_Loaded"
+        PreviewKeyDown="Window_PreviewKeyDown" PreviewKeyUp="Window_PreviewKeyUp">
+
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo Description="An app with a taskbar info description" 
+                         ProgressValue="{Binding GlobalPercentValue}" ProgressState="{Binding GlobalPercentState}"/>
+    </Window.TaskbarItemInfo>
+    
+    <Window.Resources>
+
+        <!-- CONVERTERS -->
+
+        <converters:DateLastRanToDisplayStringConverter x:Key="DateLastRanToDisplayStringConverter"/>
+        <converters:IsEnabledToImageConverter x:Key="IsEnabledToImageConverter"/>
+        <converters:Int32ToVisibilityConverter x:Key="Int32ToVisibilityConverter"/>
+        <converters:JobToSuggestedActionIcon x:Key="JobToSuggestedActionIcon"/>
+
+        <!-- STYLES -->
+
+        <Style x:Key="styleRecommendedIconImage" TargetType="Image">
+            <Setter Property="Width" Value="42"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,-8,0,0"/>
+        </Style>
+        <Style x:Key="styleEnabledDisabledIconImage" TargetType="Image">
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin"  Value="44,15,0,0"/>
+            <Setter Property="Opacity" Value="0.88"/>
+        </Style>
+        <Style x:Key="styleJobListNameTextBlock" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="-4,0,0,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <!--  -->
+        <Style x:Key="styleJobInfoTextBlock" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="3,0,0,0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="AltKeyTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Background" Value="Gainsboro"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Background" Value="Gold"/>
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="Visibility" Value="{Binding AltKey_Visibility}"/>
+            <Setter Property="Opacity" Value="0.77"/>
+        </Style>
+        <Style x:Key="styleAppIdTextBlock" TargetType="TextBlock">
+            <Setter Property="Margin" Value="25,0,0,0"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="SteelBlue"/>
+        </Style>
+
+        <!-- DATA TEMPLATES -->
+
+        <!-- ArchiveJob -->
+        <DataTemplate x:Key="ArchiveJobListTemplate">
+            <Grid Margin="0,4" Height="28">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="76"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Canvas Grid.Column="0" Grid.Row="0">
+                        <Image Style="{StaticResource styleRecommendedIconImage}"
+                               Source="{Binding RecommendedActionIcon}"/>
+                        <!--<Image Style="{StaticResource styleRecommendedIconImage}"
+                           Source="Images\BlueSpinner64x64.GIF" Width="40" Height="40"
+                           Visibility="{Binding RecommendedActionIcon_WaitIconVisibility}">
+                            <Image.RenderTransform>
+                                <RotateTransform x:Name="renderTransform" CenterX="20" CenterY="20"/>
+                            </Image.RenderTransform>
+                            <Image.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard x:Name="AnimationTrigger">
+                                        <Storyboard x:Name="storyBoardRecommendedIconAnimation">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                                           Duration="0:0:12" SpeedRatio="10"
+                                                                           RepeatBehavior="Forever">
+                                                <DiscreteDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+                                                <DiscreteDoubleKeyFrame Value="30" KeyTime="0:0:1"/>
+                                                <DiscreteDoubleKeyFrame Value="60" KeyTime="0:0:2"/>
+                                                <DiscreteDoubleKeyFrame Value="90" KeyTime="0:0:3"/>
+                                                <DiscreteDoubleKeyFrame Value="120" KeyTime="0:0:4"/>
+                                                <DiscreteDoubleKeyFrame Value="150" KeyTime="0:0:5"/>
+                                                <DiscreteDoubleKeyFrame Value="180" KeyTime="0:0:6"/>
+                                                <DiscreteDoubleKeyFrame Value="210" KeyTime="0:0:7"/>
+                                                <DiscreteDoubleKeyFrame Value="240" KeyTime="0:0:8"/>
+                                                <DiscreteDoubleKeyFrame Value="270" KeyTime="0:0:9"/>
+                                                <DiscreteDoubleKeyFrame Value="300" KeyTime="0:0:10"/>
+                                                <DiscreteDoubleKeyFrame Value="330" KeyTime="0:0:11"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Image.Triggers>
+                        </Image>-->
+                    </Canvas>
+                    <Image Grid.Column="0" Grid.Row="0" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Source="Images\decompress_48_h.ico"/>
+                    <Canvas Grid.Column="0" Grid.Row="0">
+                        <Image Style="{StaticResource styleEnabledDisabledIconImage}"
+                               Source="{Binding Path=IsEnabled, Converter={StaticResource IsEnabledToImageConverter}}"/>
+                    </Canvas>
+                    <TextBlock Grid.Column="1" Grid.Row="0" 
+                               Style="{StaticResource styleJobListNameTextBlock}"
+                               Text="{Binding Path=Name}"/>
+                </Grid>
+
+            </Grid>
+        </DataTemplate>
+
+        <!-- MirrorJob -->
+        <DataTemplate x:Key="MirrorJobListTemplate">
+            <Grid Margin="0,4" Height="28">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="76"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Canvas Grid.Column="0" Grid.Row="0">
+                    <Image Style="{StaticResource styleRecommendedIconImage}"
+                           Source="{Binding RecommendedActionIcon}"/>
+                    <!--<Image Style="{StaticResource styleRecommendedIconImage}"
+                           Source="Images\BlueSpinner64x64.GIF" Width="40" Height="40"
+                           Visibility="{Binding RecommendedActionIcon_WaitIconVisibility}">
+                        <Image.RenderTransform>
+                            <RotateTransform x:Name="renderTransform" CenterX="20" CenterY="20"/>
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard x:Name="AnimationTrigger">
+                                    <Storyboard x:Name="storyBoardRecommendedIconAnimation">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                                           Duration="0:0:12" SpeedRatio="10"
+                                                                           RepeatBehavior="Forever">
+                                            <DiscreteDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+                                            <DiscreteDoubleKeyFrame Value="30" KeyTime="0:0:1"/>
+                                            <DiscreteDoubleKeyFrame Value="60" KeyTime="0:0:2"/>
+                                            <DiscreteDoubleKeyFrame Value="90" KeyTime="0:0:3"/>
+                                            <DiscreteDoubleKeyFrame Value="120" KeyTime="0:0:4"/>
+                                            <DiscreteDoubleKeyFrame Value="150" KeyTime="0:0:5"/>
+                                            <DiscreteDoubleKeyFrame Value="180" KeyTime="0:0:6"/>
+                                            <DiscreteDoubleKeyFrame Value="210" KeyTime="0:0:7"/>
+                                            <DiscreteDoubleKeyFrame Value="240" KeyTime="0:0:8"/>
+                                            <DiscreteDoubleKeyFrame Value="270" KeyTime="0:0:9"/>
+                                            <DiscreteDoubleKeyFrame Value="300" KeyTime="0:0:10"/>
+                                            <DiscreteDoubleKeyFrame Value="330" KeyTime="0:0:11"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>-->
+                </Canvas>
+                <Image Grid.Column="0" Grid.Row="0" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Source="Images\folders.ico"/>
+                <Canvas Grid.Column="0" Grid.Row="0">
+                    <Image Style="{StaticResource styleEnabledDisabledIconImage}"
+                           Source="{Binding Path=IsEnabled, Converter={StaticResource IsEnabledToImageConverter}}"/>
+                </Canvas>
+                <TextBlock Grid.Column="1" Grid.Row="0" 
+                           Style="{StaticResource styleJobListNameTextBlock}"
+                           Text="{Binding Path=Name}"/>
+            </Grid>
+        </DataTemplate>
+
+        <!-- DATA TEMPLATE SELECTORS -->
+
+        <local:JobsListDataTemplateSelector x:Key="JobsListDataTemplateSelector"
+                                            ArchiveTemplate="{StaticResource ArchiveJobListTemplate}"
+                                            MirrorTemplate="{StaticResource MirrorJobListTemplate}"/>
+    </Window.Resources>
+
+    <!-- UI -->
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="column0" Width="240"/>
+            <ColumnDefinition x:Name="column1" Width="5"/>
+            <ColumnDefinition x:Name="column2"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="105"/>
+            <RowDefinition/>
+            <RowDefinition Height="28"/>
+        </Grid.RowDefinitions>
+
+        <!-- UI: TOOLBAR -->
+
+        <ToolBar Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3">
+            <ToolBar.Resources>
+                <Style TargetType="Image">
+                    <Setter Property="Width" Value="48"/>
+                    <Setter Property="Margin" Value="30,0"/>
+                </Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+                <Style x:Key="superButton" TargetType="Button">
+                    <Setter Property="Height" Value="100"/>
+                    <Setter Property="VerticalAlignment" Value="Top"/>
+                </Style>
+            </ToolBar.Resources>
+
+            <Button Click="toolBarButtonRefreshAll_Click"
+                    Style="{StaticResource superButton}"
+                    IsEnabled="{Binding ButtonRefreshAll_IsEnabled}" 
+                    Opacity="{Binding ButtonRefreshAll_Opacity}"
+                    Width="130">
+                <StackPanel Orientation="Vertical" Margin="0,-10,0,0">
+                    <Grid>
+                        <Image Source="Images\recycle.ico" Width="56" Opacity="0.75"/>
+                        <TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="F5"/>
+                    </Grid>
+                    <TextBlock Margin="0,5,0,-4">Refresh All</TextBlock>
+                </StackPanel>
+            </Button>
+
+            <Button Click="toolBarButtonRunAllEnabledJobs_Click"
+                    Style="{StaticResource superButton}"
+                    IsEnabled="{Binding ButtonRunAllEnabledJob_IsEnabled}" 
+                    Opacity="{Binding ButtonRunAllEnabledJob_Opacity}"
+                    Width="130">
+                <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Image Source="Images\decompress_48_h.ico" Margin="-20,-20,0,0" Width="48"  VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Image Source="Images\folders.ico" Margin="30,-10,0,0" Width="48" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <Image Source="Images\Actions-dialog-ok-apply.ico" Margin="0,-20,0,0" Width="64" Height="64" Opacity="0.5"/>
+                        <Image Source="Images\media_play_green.ico" Width="40" Height="40" Margin="33,27,0,0" Opacity="0.75"/>
+                        <!--<TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="Ctrl+F5" Width="120"/>-->
+                    </Grid>
+                    <TextBlock Margin="0,-15,0,-4">Run All</TextBlock>
+                    <TextBlock>Ready to Run Jobs</TextBlock>
+                </StackPanel>
+            </Button>
+            <Separator Margin="16,8"/>
+            <Button Click="toolBarButtonNewArchiveJob_Click" Style="{StaticResource superButton}">
+                <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Image Source="Images\decompress_48_h.ico"/>
+                        <Image Source="Images\add.png" Width="24"
+                               VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                    </Grid>
+                    <TextBlock>New</TextBlock>
+                    <TextBlock>Archive Job</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Click="toolBarButtonNewMirrorJob_Click" Style="{StaticResource superButton}">
+                <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Image Source="Images\folders.ico"/>
+                        <Image Source="Images\add.png" Width="24"
+                               VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                    </Grid>
+                    <TextBlock>New</TextBlock>
+                    <TextBlock>Mirror Job</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Click="toolBarButtonSettings_Click" Style="{StaticResource superButton}">
+                <Grid>
+                    <StackPanel Orientation="Vertical" Height="86">
+                        <Image Source="Images\ScrewdriverAndWrench.ico" Width="48"/>
+                        <TextBlock Margin="0,11,0,0">Settings</TextBlock>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="F4"/>
+                </Grid>
+            </Button>
+            <Button Click="toolBarButtonAbout_Click" Style="{StaticResource superButton}">
+                <Grid>
+                    <StackPanel Orientation="Vertical" Height="86">
+                        <Image Source="Images\Status-dialog-information.ico" Width="48"/>
+                        <TextBlock Margin="0,11,0,0">About</TextBlock>
+                    </StackPanel>
+                    <TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="F1"/>
+                </Grid>
+            </Button>
+            <Separator/>
+            <TextBlock Text="{Binding AppId}"
+                       Style="{StaticResource styleAppIdTextBlock}"/>
+        </ToolBar>
+
+        <!-- UI: JOBS LIST -->
+
+        <Grid Grid.Column="0" Grid.Row="1">
+            <ListBox Grid.Row="0" x:Name="listBoxJobs"
+                     ItemsSource="{Binding Path=Jobs}"
+                     ItemTemplateSelector="{StaticResource JobsListDataTemplateSelector}"
+                     SelectionChanged="listBoxJobs_SelectionChanged"
+                     MouseDoubleClick="listBoxJobs_MouseDoubleClick">
+
+                <ListBox.Background>
+                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                        <GradientStop Color="White" Offset="0"/>
+                        <GradientStop Color="LightGray" Offset="1" />
+                        <!--<GradientStop Color="AliceBlue" Offset="1" />-->
+                        <!--<GradientStop Color="LightSkyBlue" Offset="1" />-->
+                    </LinearGradientBrush>
+                </ListBox.Background>
+
+            </ListBox>
+        </Grid>
+
+        <!-- UI: GRID SPLITTER -->
+
+        <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" DragCompleted="GridSplitter_DragCompleted"/>
+
+        <!-- UI: JOB DETAILS -->
+
+        <Border Grid.Column="2" Grid.Row="1" 
+                BorderBrush="DarkGray" BorderThickness="1">
+            <Grid>
+                <TextBlock Text="{Binding CreateOrSelectJobText}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="Teal" FontSize="40" FontWeight="Bold"
+                           Visibility="{Binding ElementName=listBoxJobs,Path=SelectedItems.Count,Converter={StaticResource Int32ToVisibilityConverter}}"/>
+                <Grid x:Name="canvasJobDetails" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+            </Grid>
+        </Border>
+
+        <!-- UI: STATUS BAR  -->
+
+        <Grid Grid.Column="0" Grid.ColumnSpan="3"
+              Grid.Row="2"
+              Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="auto"/>
+                <!---->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="WhiteSmoke" Offset="0"/>
+                    <GradientStop Color="WhiteSmoke" Offset="0.2"/>
+                    <!--<GradientStop Color="AliceBlue" Offset="1" />-->
+                    <GradientStop Color="LightGray" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid Grid.Column="0"
+                  Margin="15,0,0,0">
+                <StackPanel Orientation="Horizontal"
+                        Background="Transparent"
+                        MouseDown="SelectNextJob_MouseDown" Tag="All">
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}" Text="{Binding TotalJobsCount}"/>
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}">Total</TextBlock>
+                </StackPanel>
+                <TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="1"/>
+            </Grid>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+            </StackPanel>
+            <Grid Grid.Column="2">
+                <StackPanel Orientation="Horizontal"
+                        Background="Transparent"
+                        MouseDown="SelectNextJob_MouseDown" Tag="Enabled">
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}" Text="{Binding EnabledJobsCount}"/>
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}">Enabled</TextBlock>
+                </StackPanel>
+                <TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="2"/>
+            </Grid>
+            <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+            </StackPanel>
+            <Grid Grid.Column="4">
+                <StackPanel Orientation="Horizontal"
+                        Background="Transparent"
+                        MouseDown="SelectNextJob_MouseDown" Tag="Ready">
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}" Text="{Binding ReadyToRunJobsCount}"/>
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}">Enabled, Ready to Run</TextBlock>
+                </StackPanel>
+                <TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="3"/>
+            </Grid>
+            <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"/>
+            </StackPanel>
+            <Grid Grid.Column="6">
+                <StackPanel Orientation="Horizontal"
+                        Background="Transparent"
+                        MouseDown="SelectNextJob_MouseDown" Tag="DisabledReady">
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}" Text="{Binding DisabledReadyToRunJobsCount}"/>
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}">Disabled, Ready to Run</TextBlock>
+                </StackPanel>
+                <TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="4"/>
+            </Grid>
+            <Grid Grid.Column="7" HorizontalAlignment="Right" Margin="0,0,10,0">
+                <StackPanel Orientation="Horizontal"
+                        Background="Transparent"
+                        MouseDown="OpenJobInformation_MouseDown">
+                    <TextBlock Style="{StaticResource styleJobInfoTextBlock}" Text="{Binding JobInformation}"/>
+                </StackPanel>
+                <TextBlock Style="{StaticResource AltKeyTextBlockStyle}" Text="F2" Width="60"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

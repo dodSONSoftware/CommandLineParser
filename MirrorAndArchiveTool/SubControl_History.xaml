@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="MirrorAndArchiveTool.SubControl_History"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:MirrorAndArchiveTool.ValueConverters" 
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="600">
+    <UserControl.Resources>
+        <converters:Int32ToBoolConverter x:Key="Int32ToBoolConverter"/>
+        <converters:Int32ToOpacityConverter x:Key="Int32ToOpacityConverter"/>
+        <converters:ReportNameToHyperLinkConveter x:Key="ReportNameToHyperLinkConveter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="42"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <ToolBar Grid.Row="0">
+            <Button Click="buttonDeleteAll_Click" 
+                    IsEnabled="{Binding ElementName=dataGridData,Path=Items.Count,Converter={StaticResource Int32ToBoolConverter}}"
+                    Opacity="{Binding ElementName=dataGridData,Path=Items.Count,Converter={StaticResource Int32ToOpacityConverter}}"
+                    ToolTip="Delete All Reports">
+                <Button.Content>
+                    <Image Source="Images/garbage_empty.ico" Width="32" Height="32"/>
+                </Button.Content>
+            </Button>
+            <Button Click="buttonDelete_Click" 
+                    IsEnabled="{Binding ElementName=dataGridData,Path=SelectedItems.Count,Converter={StaticResource Int32ToBoolConverter}}"
+                    Opacity="{Binding ElementName=dataGridData,Path=SelectedItems.Count,Converter={StaticResource Int32ToOpacityConverter}}"
+                    ToolTip="Delete Selected Reports">
+                <Button.Content>
+                    <Image Source="Images/delete2.ico" Width="32" Height="32"/>
+                </Button.Content>
+            </Button>
+            <Separator/>
+            <Button Click="buttonOpen_Click" 
+                    IsEnabled="{Binding ElementName=dataGridData,Path=SelectedItems.Count,Converter={StaticResource Int32ToBoolConverter}}"
+                    Opacity="{Binding ElementName=dataGridData,Path=SelectedItems.Count,Converter={StaticResource Int32ToOpacityConverter}}"
+                    ToolTip="Open Selected Report">
+                <Button.Content>
+                    <Image Source="Images/document_view.ico" Width="32" Height="32"/>
+                </Button.Content>
+            </Button>
+            <Button Click="buttonExport_Click" 
+                    IsEnabled="{Binding ElementName=dataGridData,Path=SelectedItems.Count,Converter={StaticResource Int32ToBoolConverter}}"
+                    Opacity="{Binding ElementName=dataGridData,Path=SelectedItems.Count,Converter={StaticResource Int32ToOpacityConverter}}"
+                    ToolTip="Save Selected Reports">
+                <Button.Content>
+                    <Image Source="Images/disk_blue.ico" Width="32" Height="32"/>
+                </Button.Content>
+            </Button>
+        </ToolBar>
+
+        <DataGrid x:Name="dataGridData" ItemsSource="{Binding Reports}" Grid.Row="1"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="True"
+                  SelectionMode="Extended" 
+                  SelectionChanged="dataGridData_SelectionChanged"
+                  MouseDoubleClick="dataGridData_MouseDoubleClick">
+            <DataGrid.ContextMenu>
+                <ContextMenu Opened="ContextMenu_Opened">
+                    <MenuItem Command="{Binding OpenReportsCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                  Header="Open Report" />
+                    <MenuItem Command="{Binding SaveReportsCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                  Header="Save Reports" />
+                    <MenuItem Command="{Binding DeleteReportsCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                  Header="Delete Reports" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+                <DataGridHyperlinkColumn Header="Report" Width="Auto"  IsReadOnly="True"
+                                         Binding="{Binding Path=ReportName}" 
+                                         ContentBinding="{Binding Path=ReportName,Converter={StaticResource ReportNameToHyperLinkConveter}}">
+                    <DataGridHyperlinkColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <EventSetter Event="Hyperlink.Click" Handler="OnHyperLinkClick"/>
+                            <Setter Property="Margin" Value="5,0"/>
+                        </Style>
+                    </DataGridHyperlinkColumn.ElementStyle>
+                </DataGridHyperlinkColumn>
+                <DataGridTextColumn Header="Date Created" Width="150" Binding="{Binding Path=DateCreated}" SortDirection="Descending"/>
+                <DataGridTextColumn Header="Total Rows" Width="100" Binding="{Binding Path=TotalRows}"/>
+                <DataGridTextColumn Header="% Changed" Width="100" Binding="{Binding Path=PercentChanged}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <StatusBar Grid.Row="2">
+            <Image x:Name="imageRecommendationWaitIcon" Source="Images\BlueSpinner64x64.GIF" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Width="24" Height="24">
+                <Image.RenderTransform>
+                    <RotateTransform x:Name="renderTransform" CenterX="12" CenterY="12"/>
+                </Image.RenderTransform>
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard x:Name="AnimationTrigger">
+                            <Storyboard x:Name="storyBoardRecommendedIconAnimation">
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                                           Duration="0:0:12" SpeedRatio="10"
+                                                                           RepeatBehavior="Forever">
+                                    <DiscreteDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+                                    <DiscreteDoubleKeyFrame Value="30" KeyTime="0:0:1"/>
+                                    <DiscreteDoubleKeyFrame Value="60" KeyTime="0:0:2"/>
+                                    <DiscreteDoubleKeyFrame Value="90" KeyTime="0:0:3"/>
+                                    <DiscreteDoubleKeyFrame Value="120" KeyTime="0:0:4"/>
+                                    <DiscreteDoubleKeyFrame Value="150" KeyTime="0:0:5"/>
+                                    <DiscreteDoubleKeyFrame Value="180" KeyTime="0:0:6"/>
+                                    <DiscreteDoubleKeyFrame Value="210" KeyTime="0:0:7"/>
+                                    <DiscreteDoubleKeyFrame Value="240" KeyTime="0:0:8"/>
+                                    <DiscreteDoubleKeyFrame Value="270" KeyTime="0:0:9"/>
+                                    <DiscreteDoubleKeyFrame Value="300" KeyTime="0:0:10"/>
+                                    <DiscreteDoubleKeyFrame Value="330" KeyTime="0:0:11"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
+
+            <TextBlock Text="{Binding ElementName=dataGridData, Path=ItemsSource.Count, StringFormat={}{0} Reports}"/>
+            <TextBlock Margin="20,0,0,0" Text="{Binding DateRangeText}"/>
+        </StatusBar>
+    </Grid>
+</UserControl>

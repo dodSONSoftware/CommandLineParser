@@ -1,0 +1,194 @@
+﻿<UserControl x:Class="MirrorAndArchiveTool.JobDetails"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:chartingToolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+             xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+             xmlns:converters="clr-namespace:MirrorAndArchiveTool.ValueConverters"
+             mc:Ignorable="d" d:DesignHeight="1000"
+             Unloaded="UserControl_Unloaded">
+
+    <UserControl.Resources>
+        <converters:DateLastRanToDisplayStringConverter x:Key="DateLastRanToDisplayStringConverter"/>
+        <converters:DateToTimeAgo x:Key="DateToTimeAgo"/>
+    </UserControl.Resources>
+
+    <Border>
+        <Grid x:Name="gridTheGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="555"/>
+                <RowDefinition Height="135"/>
+                <RowDefinition Height="24"/>
+            </Grid.RowDefinitions>
+
+            <ToolBar Grid.Row="0">
+                <Button Click="button_IsEnabled" Width="80">
+                    <StackPanel>
+                        <Image Source="{Binding IsEnabledButtonImage}" Width="32" Height="32"/>
+                        <TextBlock x:Name="buttonIsEnabledText" Text="Enabled"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="buttonRunNow" Width="80" IsEnabled="False"
+                        Click="buttonRunNow_Click">
+                    <StackPanel Opacity="{Binding RunJobButtonOpacity}">
+                        <Grid>
+                            <Image Source="{Binding RunJobButtonImage}" Width="32"/>
+                            <Image Source="Images\media_play_green.ico" Width="28" 
+                                   Margin="-8,-4" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                   Opacity="0.9"/>
+                        </Grid>
+                        <TextBlock Text="Run Job"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="buttonReport" Width="80" IsEnabled="False"
+                        Click="buttonReport_Click">
+                    <StackPanel Opacity="{Binding RunJobButtonOpacity}">
+                        <Image Source="Images\text.ico" Width="32"/>
+                        <TextBlock Text="Report"/>
+                    </StackPanel>
+                </Button>
+                <Button Width="80" Click="buttonEdit_Click">
+                    <StackPanel>
+                        <Image Source="Images\note_edit.ico" Width="32"/>
+                        <TextBlock Text="Edit"/>
+                    </StackPanel>
+                </Button>
+                <Button Width="80" Click="buttonDelete_Click">
+                    <StackPanel>
+                        <Image Source="Images\delete2.ico" Width="32"/>
+                        <TextBlock Text="Delete"/>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10,0">
+                <Grid Height="130">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="96"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="110"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Image x:Name="imageRecommendationIcon" 
+                               Source="{Binding RecommendedActionImage}" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Width="96" Height="96"/>
+                        <Image x:Name="imageRecommendationWaitIcon" Source="Images\BlueSpinner64x64.GIF" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Width="64" Height="64">
+                            <Image.RenderTransform>
+                                <RotateTransform x:Name="renderTransform" CenterX="32" CenterY="32"/>
+                            </Image.RenderTransform>
+                            <Image.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard x:Name="AnimationTrigger">
+                                        <Storyboard x:Name="storyBoardRecommendedIconAnimation">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                                           Duration="0:0:12" SpeedRatio="10"
+                                                                           RepeatBehavior="Forever">
+                                                <DiscreteDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+                                                <DiscreteDoubleKeyFrame Value="30" KeyTime="0:0:1"/>
+                                                <DiscreteDoubleKeyFrame Value="60" KeyTime="0:0:2"/>
+                                                <DiscreteDoubleKeyFrame Value="90" KeyTime="0:0:3"/>
+                                                <DiscreteDoubleKeyFrame Value="120" KeyTime="0:0:4"/>
+                                                <DiscreteDoubleKeyFrame Value="150" KeyTime="0:0:5"/>
+                                                <DiscreteDoubleKeyFrame Value="180" KeyTime="0:0:6"/>
+                                                <DiscreteDoubleKeyFrame Value="210" KeyTime="0:0:7"/>
+                                                <DiscreteDoubleKeyFrame Value="240" KeyTime="0:0:8"/>
+                                                <DiscreteDoubleKeyFrame Value="270" KeyTime="0:0:9"/>
+                                                <DiscreteDoubleKeyFrame Value="300" KeyTime="0:0:10"/>
+                                                <DiscreteDoubleKeyFrame Value="330" KeyTime="0:0:11"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Image.Triggers>
+                        </Image>
+                    </Grid>
+
+                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10,0,0,0">
+                        <TextBlock FontSize="18" FontWeight="Bold" Text="{Binding Job.Name}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold" Text="Date Created: "/>
+                            <TextBlock x:Name="textBlockDateCreated"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold" Text="Date Last Ran: "/>
+                            <TextBlock x:Name="textBlockDateLastRan"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold" Text="Total Files: "/>
+                            <TextBlock x:Name="textBoxFilesTotal"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold" Text="Recommended Action: "/>
+                            <TextBlock Text="{Binding RecommendedActionText}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="32,0,0,0" Text="{Binding RecommendedActionReasons}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Height="300" Width="350"
+                  HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Border x:Name="borderAnalyzingJobActionStatus"
+                        BorderBrush="Black" BorderThickness="1" CornerRadius="0">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Analyzing Job..." FontSize="40" FontWeight="Bold" Foreground="Teal"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Margin="0,100,0,0"></TextBlock>
+                            <ProgressBar Width="300" Height="8" Margin="0,5"
+                                         Minimum="0"  Maximum="1" Value="{Binding ProgressBarPercentage}"
+                                         IsIndeterminate="{Binding ProgressBarIsIndeterminate}"/>
+                            <TextBlock Margin="25,-6,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                       FontSize="10" FontWeight="Bold" Foreground="Teal"
+                                       Text="{Binding textBlockAnalyzingText}"/>
+                            <TextBlock Margin="25,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                       FontSize="10" FontWeight="Bold" Foreground="Teal"
+                                       Text="{Binding textBlockAnalyzingText2}"/>
+                        </StackPanel>
+                    </Border>
+                    <charting:Chart x:Name="chart" Visibility="Hidden"
+                            Title="Files Action Status"
+                            Height="300" Width="350"
+                            MinHeight="300" MaxHeight="300" MinWidth="350" MaxWidth="350"
+                            HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <charting:Chart.Series>
+                            <charting:PieSeries ItemsSource="{Binding Path=FileChangesPercentages}" 
+                                                DependentValuePath="Value" 
+                                                IndependentValuePath="Key"
+                                                Title="File Status" IsSelectionEnabled="False">
+                            </charting:PieSeries>
+                        </charting:Chart.Series>
+                    </charting:Chart>
+                </Grid>
+
+                <DataGrid x:Name="dataGridFilesDetails" 
+                      IsReadOnly="True"
+                      Width="350" VerticalAlignment="Top" HorizontalAlignment="Left"
+                      AutoGenerateColumns="True" ColumnWidth="110"
+                      CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False"
+                      SelectedCellsChanged="dataGridFilesDetails_SelectedCellsChanged"/>
+            </StackPanel>
+
+            <ContentControl Grid.Row="2" x:Name="contentControlJobDetails" 
+                            Height="135" Width="420"
+                            Margin="10,0" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+
+            <ContentControl Grid.Row="3" x:Name="contentControlJobCommonDetails" 
+                            Height="22" Width="420"                             
+                            Margin="10,0,0,5" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,181 @@
+﻿<UserControl x:Class="MirrorAndArchiveTool.HeaderSubControl2"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MirrorAndArchiveTool"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="750">
+    <UserControl.Resources>
+        <Style x:Key="LittleTitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="SteelBlue"/>
+        </Style>
+        <Style x:Key="ReportStatsBigText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="ReportStatsNormalText" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!---->
+
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                    Orientation="Vertical" 
+                    Margin="5">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource LittleTitleTextFormat}">Report Information</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,4,0">Report Date:</TextBlock>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.ReportDate}"/>
+                    <TextBlock Grid.Row="1" Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.ReportAge}"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,0,0">Report Rows:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.TotalCount,StringFormat={}{0:N0}}"/>
+            </StackPanel>            
+            
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,35,0">Export Ok Files:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="32" Text="{Binding ReportFileStats.ExportOK}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="73" Text="{Binding ReportFileStats.OkCount, StringFormat=N0}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="40" Text="{Binding ReportFileStats.OkPercentChanged, StringFormat=N2}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Margin="2,0,0,0" TextAlignment="Left">%</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,23,0">Export New Files:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}"  TextAlignment="Right" Width="32" Text="{Binding ReportFileStats.ExportNew}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="73" Text="{Binding ReportFileStats.NewCount, StringFormat=N0}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="40" Text="{Binding ReportFileStats.NewPercentChanged, StringFormat=N2}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Margin="2,0,0,0" TextAlignment="Left">%</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,5,0">Export Update Files:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="32" Text="{Binding ReportFileStats.ExportUpdate}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="73" Text="{Binding ReportFileStats.UpdateCount, StringFormat=N0}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="40" Text="{Binding ReportFileStats.UpdatePercentChanged, StringFormat=N2}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Margin="2,0,0,0" TextAlignment="Left">%</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,0,0">Export Remove Files:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="32" Text="{Binding ReportFileStats.ExportRemove}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="73" Text="{Binding ReportFileStats.RemoveCount, StringFormat=N0}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="40" Text="{Binding ReportFileStats.RemovePercentChanged, StringFormat=N2}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Margin="2,0,0,0" TextAlignment="Left">%</TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,18,0">Total Changed Files:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="60" Text="{Binding ReportFileStats.TotalChangedCount,StringFormat={}{0:N0}}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="40" Text="{Binding ReportFileStats.TotalPercentChanged, StringFormat=N2}"/>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Margin="2,0,0,0" TextAlignment="Left">%</TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,31,0">Source Total Files:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="60" Text="{Binding ReportFileStats.SourceTotalCount,StringFormat={}{0:N0}}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,0,0">Destination Total Files:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" TextAlignment="Right" Width="60" Text="{Binding ReportFileStats.DestinationTotalCount,StringFormat={}{0:N0}}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!---->
+        
+        <StackPanel Grid.Column="1" Grid.Row="0"
+                    Margin="10,5,0,0">
+            <StackPanel x:Name="ReportFileStatisticsPanel" Orientation="Horizontal"
+                        VerticalAlignment="Top">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource LittleTitleTextFormat}">Job Information</TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,0,0">Name:</TextBlock>
+                        <TextBlock Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.JobName}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,7,0">Type:</TextBlock>
+                        <TextBlock Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.JobType}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ReportStatsBigText}">Date Create:</TextBlock>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.JobDateCreated}"/>
+                            <TextBlock Grid.Row="1" Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.JobAge}"/>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ReportStatsBigText}">Archive Remove Files:</TextBlock>
+                        <TextBlock Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.JobArchiveRemoveFiles}"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <Grid Grid.Column="1" Grid.Row="1"
+              Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--ARCHIVE UI-->
+            <StackPanel Grid.Row="0"
+                        Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                        Visibility="{Binding ArchivePathsVisibility}">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,4,0">Storage Path:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.JobArchiveStoragePath}"
+                               TextWrapping="Wrap" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+                <TextBlock Style="{StaticResource ReportStatsBigText}">Source Paths:</TextBlock>
+            </StackPanel>
+            <ListBox Grid.Row="1" Visibility="{Binding ArchivePathsVisibility}"
+                     Margin="0,-15,0,0"
+                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                     ItemsSource="{Binding ReportFileStats.JobArchiveSourcePaths}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!--MIRROR UI-->
+            <StackPanel Grid.Row="0" Orientation="Vertical" 
+                        Visibility="{Binding MirrorPathsVisibility}">
+                <TextBlock Style="{StaticResource ReportStatsBigText}" Margin="0,0,4,0">Source Path:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.JobMirrorSourcePath}"
+                               TextWrapping="Wrap" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+                <TextBlock Style="{StaticResource ReportStatsBigText}">Mirror Path:</TextBlock>
+                <TextBlock Style="{StaticResource ReportStatsNormalText}" Text="{Binding ReportFileStats.JobMirrorDestinationPath}" 
+                               TextWrapping="Wrap" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

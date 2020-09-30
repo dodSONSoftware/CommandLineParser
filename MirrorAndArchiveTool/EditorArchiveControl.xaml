@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="MirrorAndArchiveTool.EditorArchiveControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:MirrorAndArchiveTool.ValueConverters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+    <UserControl.Resources>
+        <converters:Int32ToBoolConverter x:Key="Int32ToBoolConverter"/>
+
+        <Color x:Key="NormalBrush">#FF00FF00</Color>
+        <Color x:Key="HighBrush">#FF000000</Color>
+
+        <Style x:Key="HelpTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="ForestGreen"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <StackPanel.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="16"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="80"/>
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                </Style>
+            </StackPanel.Resources>
+
+            <TextBlock Style="{StaticResource HelpTextFormat}" TextWrapping="WrapWithOverflow"
+                       Margin="0,0,10,5" Height="50">When executed, the Archive Job will create, and maintain, zip files for each source path entered; each zip file will be maintained by copying new files, updating out-of-date files, and removing files as necessary to, and from, the various zip files</TextBlock>
+
+            <TextBlock Text="Archive Storage Path"/>
+            <TextBox Text="{Binding Job.ArchiveRootPath,Mode=TwoWay}" TextChanged="buttonText_TextChanged"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="browse..." Click="buttonArchiveStoragePathBrowse"/>
+                <Button Content="open" Margin="5,0"
+                                Click="buttonArchiveStoragePathBrowseOpen"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <TextBlock Text="Source Paths"/>
+                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center"
+                           Text="(double-click to open folder)"
+                           FontSize="10" Foreground="ForestGreen"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ListBox Grid.Row="1" x:Name="listBoxSourcePaths" 
+                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                 ItemsSource="{Binding Job.SourcePaths}" 
+                 SelectionMode="Single"
+                 MouseDoubleClick="listBoxSourcePaths_MouseDoubleClick">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}"
+                               MouseEnter="TextBlock_MouseEnter" MouseLeave="TextBlock_MouseLeave"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left" 
+                       FontSize="12" FontWeight="Normal"
+                       Text="{Binding ElementName=listBoxSourcePaths,Path=Items.Count,StringFormat={}{0:N0} files}"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="Image">
+                        <Setter Property="Width" Value="20"/>
+                        <Setter Property="Margin" Value="0,0,8,0"/>
+                    </Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                    </Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="8,0,0,0"/>
+                        <Setter Property="Padding" Value="12,4"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button x:Name="buttonAdd" Click="buttonAdd_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images\add.png"/>
+                        <TextBlock>Add</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="buttonDelete" Click="buttonDelete_Click"
+                        IsEnabled="{Binding ElementName=listBoxSourcePaths,Path=SelectedItems.Count,Converter={StaticResource Int32ToBoolConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images\delete.png"/>
+                        <TextBlock>Remove</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="buttonClearAll" Click="buttonClearAll_Click"
+                        IsEnabled="{Binding ElementName=listBoxSourcePaths,Path=Items.Count,Converter={StaticResource Int32ToBoolConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Images\forbidden.png"/>
+                        <TextBlock>Remove All</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

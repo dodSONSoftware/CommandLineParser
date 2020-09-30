@@ -1,0 +1,403 @@
+﻿<Window x:Class="MirrorAndArchiveTool.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:converters="clr-namespace:MirrorAndArchiveTool.ValueConverters"
+        Width="800" Height="1000" 
+        MinWidth="800" MinHeight="320" 
+        WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ResizeMode="CanResizeWithGrip" ShowInTaskbar="False"
+        KeyUp="Window_KeyUp" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Window.Resources>
+        <converters:LongToByteSizeConverter x:Key="LongToByteSizeConverter"/>
+        <converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <!-- Style="BorderStandardStyle"-->
+        <!--  Padding="10,5" BorderBrush="SteelBlue" BorderThickness="1" CornerRadius="1"-->
+        <Style x:Key="BorderStandardStyle" TargetType="Border">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderBrush" Value="SteelBlue"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style x:Key="HelpTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="ForestGreen"/>
+        </Style>
+        <Style x:Key="BigTitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Blue"/>
+        </Style>
+        <Style x:Key="LittleTitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="SteelBlue"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="88"/>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Image Source="Images\ScrewdriverAndWrench.ico" Width="64" Height="64" Margin="0,20,0,0"/>
+
+        <ScrollViewer Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                      Padding="8"
+                      HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Width" Value="80"/>
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="Margin" Value="5,0,0,0"/>
+                    </Style>
+                </StackPanel.Resources>
+
+
+
+                <TextBlock Margin="0,10,0,0" Style="{StaticResource BigTitleTextFormat}">Recommended Action "Run Job" Time Limit</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <ComboBox Grid.Column="0" 
+                              x:Name="comboBoxRecommendedActionTimeLimit" Width="100"
+                              HorizontalAlignment="Left" VerticalAlignment="Top"
+                              SelectionChanged="ComboBoxRecommendedActionTimeLimit_SelectionChanged">
+                            <ComboBoxItem Content="15 Minutes" Tag="15"/>
+                            <ComboBoxItem Content="30 Minutes" Tag="30"/>
+                            <ComboBoxItem Content="1 Hour" Tag="60"/>
+                            <ComboBoxItem Content="2 Hours" Tag="120"/>
+                            <ComboBoxItem Content="3 Hour" Tag="180"/>
+                            <ComboBoxItem Content="4 Hours" Tag="240"/>
+                            <ComboBoxItem Content="8 Hours" Tag="480"/>
+                            <ComboBoxItem Content="12 Hours" Tag="720"/>
+                            <ComboBoxItem Content="1 Day" Tag="1440"/>
+                            <ComboBoxItem Content="2 Days" Tag="2880"/>
+                            <ComboBoxItem Content="3 Days" Tag="4320"/>
+                            <!--<ComboBoxItem Content="4 Days" Tag="5760"/>-->
+                            <ComboBoxItem Content="5 Days" Tag="7200"/>
+                            <ComboBoxItem Content="1 Week" Tag="10080"/>
+                            <ComboBoxItem Content="2 Weeks" Tag="20160"/>
+                            <!--<ComboBoxItem Content="3 Weeks" Tag="30240"/>-->
+                            <ComboBoxItem Content="1 Month" Tag="43200"/>
+                        </ComboBox>
+
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center"
+                               Style="{StaticResource HelpTextFormat}"
+                               Text="{Binding RecommendedActionTimeLimitExplaination}"
+                               TextWrapping="Wrap" />
+                    </Grid>
+                </StackPanel>
+
+
+
+
+                <StackPanel Margin="0,10,0,0">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Width" Value="80"/>
+                            <Setter Property="Margin" Value="5,0,0,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <CheckBox Margin="0,10,0,0" x:Name="checkBoxEnableExtensionsToStore" 
+                          IsChecked="{Binding Settings.EnableFileExtensionsToStore}">
+                        <TextBlock Style="{StaticResource BigTitleTextFormat}">Enable File Compression Storage by File Extension</TextBlock>
+                    </CheckBox>
+                    <Border Style="{StaticResource BorderStandardStyle}"
+                        IsEnabled="{Binding ElementName=checkBoxEnableExtensionsToStore, Path=IsChecked}"
+                        Visibility="{Binding ElementName=checkBoxEnableExtensionsToStore,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource LittleTitleTextFormat}">File Extensions to Store</TextBlock>
+                                <TextBlock Margin="15,0,0,2" VerticalAlignment="Bottom" 
+                                           Style="{StaticResource HelpTextFormat}">Will not compress files with these extensions</TextBlock>
+                            </StackPanel>
+                            <TextBlock FontSize="11" FontWeight="Normal">(Comma-separated, periods are optional)</TextBlock>
+                            <TextBox Text="{Binding Settings.FileExtensionsToStore}" Height="64" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Click="buttonStoreExtensionClear">Clear</Button>
+                                <Button Width="120" Click="buttonStoreExtensionExamineZip">Examine Zip Files</Button>
+                                <Button Click="buttonStoreExtensionImport">Import</Button>
+                                <Button Click="buttonStoreExtensionExport">Export</Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+
+
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Margin="0,10,0,0" x:Name="checkBoxEnableAutomaticReporting"
+                          IsChecked="{Binding Settings.EnableAutomaticReporting}">
+                        <TextBlock Style="{StaticResource BigTitleTextFormat}">Enable Automatic Reporting</TextBlock>
+                    </CheckBox>
+                    <TextBlock Margin="15,0,0,2" VerticalAlignment="Bottom" 
+                           Style="{StaticResource HelpTextFormat}"
+                           Visibility="{Binding ElementName=checkBoxEnableAutomaticReporting,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">Will automatically create reports when jobs are run</TextBlock>
+                </StackPanel>
+                <Border Style="{StaticResource BorderStandardStyle}"
+                    IsEnabled="{Binding ElementName=checkBoxEnableAutomaticReporting, Path=IsChecked}"
+                    Visibility="{Binding ElementName=checkBoxEnableAutomaticReporting,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Style="{StaticResource LittleTitleTextFormat}" Text="Reports Root Path"/>
+                        <TextBox Text="{Binding Settings.AutomaticReportingRootPath}"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="browse..." Click="buttonAutomaticReportingRootPathBrowse"/>
+                            <Button Content="open" Click="buttonAutomaticReportingRootPathOpen"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="checkBoxEnableAutoDeleteAutomaticReportByAge" 
+                          IsChecked="{Binding Settings.EnableAutomaticReportsDeletionByAge}">
+                            <TextBlock Style="{StaticResource LittleTitleTextFormat}">Automatically Delete Reports by Age</TextBlock>
+                        </CheckBox>
+                        <Grid Margin="0,0,0,10"
+                          IsEnabled="{Binding ElementName=checkBoxEnableAutoDeleteAutomaticReportByAge, Path=IsChecked}"
+                          Visibility="{Binding ElementName=checkBoxEnableAutoDeleteAutomaticReportByAge,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                <ComboBox x:Name="comboBoxDeleteAutomaticReportsByAge" Width="80"
+                                  SelectionChanged="ComboBoxDeleteAutomaticReportsByAge_SelectionChanged">
+                                    <ComboBoxItem Content="1 Week" Tag="7"/>
+                                    <ComboBoxItem Content="2 Weeks" Tag="14"/>
+                                    <ComboBoxItem Content="3 Weeks" Tag="21"/>
+                                    <ComboBoxItem Content="1 Month" Tag="30"/>
+                                    <ComboBoxItem Content="2 Months" Tag="60"/>
+                                    <ComboBoxItem Content="3 Months" Tag="90"/>
+                                    <ComboBoxItem Content="6 Months" Tag="180"/>
+                                    <ComboBoxItem Content="1 Year" Tag="360"/>
+                                    <ComboBoxItem Content="2 Years" Tag="720"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="20,0,0,0" 
+                                   Style="{StaticResource HelpTextFormat}"
+                                   Text="{Binding DeleteAutomaticReportsByAgeExplaination}"/>
+                        </Grid>
+                        <Button Width="120" Click="buttonReportViewer_Click">Report Viewer</Button>
+                    </StackPanel>
+                </Border>
+
+
+
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Margin="0,10,0,0" x:Name="checkBoxEnableRemovedArchiveFilesSystem" 
+                      IsChecked="{Binding Settings.EnableRemovedFilesArchive}">
+                        <TextBlock Style="{StaticResource BigTitleTextFormat}">Enable Removed Files Archive</TextBlock>
+                    </CheckBox>
+                    <TextBlock Margin="15,0,0,2" VerticalAlignment="Bottom" 
+                           Style="{StaticResource HelpTextFormat}"
+                           Visibility="{Binding ElementName=checkBoxEnableRemovedArchiveFilesSystem,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">Will create archives for files being removed or updated</TextBlock>
+
+                </StackPanel>
+                <Border Style="{StaticResource BorderStandardStyle}"
+                    IsEnabled="{Binding ElementName=checkBoxEnableRemovedArchiveFilesSystem, Path=IsChecked}"
+                    Visibility="{Binding ElementName=checkBoxEnableRemovedArchiveFilesSystem,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Style="{StaticResource LittleTitleTextFormat}" Text="Archive Root Path"/>
+                        <TextBox Text="{Binding Settings.RemovedFilesArchiveRootPath}"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="browse..." Click="buttonRemovedFilesArchiveRootPathBrowse"/>
+                            <Button Content="open" Click="buttonRemovedFilesArchiveRootPathOpen"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="checkBoxEnableAutoDeleteRemovedFilesArchiveByAge" 
+                          IsChecked="{Binding Settings.EnableAutoDeleteRemovedFilesArchiveByAge}">
+                            <TextBlock Style="{StaticResource LittleTitleTextFormat}">Automatically Delete Archives by Age</TextBlock>
+                        </CheckBox>
+                        <StackPanel Orientation="Horizontal" Margin="20,0,0,10"
+                                IsEnabled="{Binding ElementName=checkBoxEnableAutoDeleteRemovedFilesArchiveByAge, Path=IsChecked}"
+                                Visibility="{Binding ElementName=checkBoxEnableAutoDeleteRemovedFilesArchiveByAge,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                            <ComboBox x:Name="comboBoxDeleteByAge" Width="80"
+                                  SelectionChanged="ComboBoxDeleteByAge_SelectionChanged">
+                                <ComboBoxItem Content="1 Week" Tag="7"/>
+                                <ComboBoxItem Content="2 Weeks" Tag="14"/>
+                                <ComboBoxItem Content="3 Weeks" Tag="21"/>
+                                <ComboBoxItem Content="1 Month" Tag="30"/>
+                                <ComboBoxItem Content="2 Months" Tag="60"/>
+                                <ComboBoxItem Content="3 Months" Tag="90"/>
+                                <ComboBoxItem Content="6 Months" Tag="180"/>
+                                <ComboBoxItem Content="1 Year" Tag="360"/>
+                                <ComboBoxItem Content="2 Years" Tag="720"/>
+                            </ComboBox>
+                            <TextBlock Margin="20,0,0,0" VerticalAlignment="Center"
+                                   Style="{StaticResource HelpTextFormat}"
+                                   Text="{Binding DeleteByAgeExplaination}"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="checkBoxEnableAutoDeleteRemovedFilesArchiveBySize"
+                              IsChecked="{Binding Settings.EnableAutoDeleteRemovedFilesArchiveBySize}">
+                            <TextBlock Style="{StaticResource LittleTitleTextFormat}">Automatically Delete Archives by Size</TextBlock>
+                        </CheckBox>
+                        <Grid Margin="20,0,0,10"
+                          IsEnabled="{Binding ElementName=checkBoxEnableAutoDeleteRemovedFilesArchiveBySize, Path=IsChecked}"
+                          Visibility="{Binding ElementName=checkBoxEnableAutoDeleteRemovedFilesArchiveBySize,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" 
+                                    Grid.Column="0"
+                                    VerticalAlignment="Top" HorizontalAlignment="Left">
+                                <TextBox x:Name="textBoxDeleteBySize"
+                                     Width="60"
+                                     TextChanged="TextBoxDeleteBySize_TextChanged"/>
+                                <ComboBox x:Name="comboBoxDeleteBySize"
+                                      Width="90"
+                                      SelectionChanged="ComboBoxDeleteBySize_SelectionChanged">
+                                    <ComboBoxItem Content="bytes" Tag="1"/>
+                                    <ComboBoxItem Content="Kilobytes" Tag="1024"/>
+                                    <ComboBoxItem Content="Megabytes" Tag="1048576"/>
+                                    <ComboBoxItem Content="Gigabytes" Tag="1073741824"/>
+                                    <ComboBoxItem Content="Terabytes" Tag="1099511627776"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <TextBlock Grid.Column="1" 
+                                   TextWrapping="WrapWithOverflow" VerticalAlignment="Center"
+                                   Style="{StaticResource HelpTextFormat}"
+                                   Text="{Binding DeleteBySizeExplaination}"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+
+
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Width" Value="80"/>
+                            <Setter Property="Margin" Value="5,0,0,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Margin="0,10,0,0" x:Name="checkBoxEnableArchiveZipFileSnapshots" 
+                          IsChecked="{Binding Settings.EnableArchiveZipFileSnapshots}">
+                            <TextBlock Style="{StaticResource BigTitleTextFormat}">Enable Archive Snapshots</TextBlock>
+                        </CheckBox>
+                        <TextBlock Margin="15,0,0,2" VerticalAlignment="Bottom" 
+                           Style="{StaticResource HelpTextFormat}"
+                           Visibility="{Binding ElementName=checkBoxEnableArchiveZipFileSnapshots,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">Will create snapshots of the working archives</TextBlock>
+                    </StackPanel>
+                    <Border Style="{StaticResource BorderStandardStyle}"
+                        IsEnabled="{Binding ElementName=checkBoxEnableArchiveZipFileSnapshots, Path=IsChecked}"
+                        Visibility="{Binding ElementName=checkBoxEnableArchiveZipFileSnapshots,Path=IsChecked,Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Style="{StaticResource LittleTitleTextFormat}" Text="Snapshots Storage Path"/>
+                                <TextBox Text="{Binding Settings.ArchiveZipFileSnapshotsRootPath}"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="browse..." Click="buttonSnapshotsStoragePathBrowse"/>
+                                    <Button Content="open" Click="buttonSnapshotsStorageRootPathOpen"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource LittleTitleTextFormat}">Time to maintain current archive before creating a snapshot</TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="comboBoxSnapshotTimeLimit" Width="100"
+                                          SelectionChanged="ComboBoxSnapshotTimeLimit_SelectionChanged">
+                                        <ComboBoxItem Content="1 Day" Tag="1"/>
+                                        <ComboBoxItem Content="2 Days" Tag="2"/>
+                                        <ComboBoxItem Content="3 Days" Tag="3"/>
+                                        <ComboBoxItem Content="4 Days" Tag="4"/>
+                                        <ComboBoxItem Content="5 Days" Tag="5"/>
+                                        <ComboBoxItem Content="6 Days" Tag="6"/>
+                                        <ComboBoxItem Content="1 Week" Tag="7"/>
+                                        <ComboBoxItem Content="2 Weeks" Tag="14"/>
+                                        <ComboBoxItem Content="3 Weeks" Tag="21"/>
+                                        <ComboBoxItem Content="1 Month" Tag="30"/>
+                                        <ComboBoxItem Content="2 Month" Tag="60"/>
+                                        <ComboBoxItem Content="3 Month" Tag="90"/>
+                                    </ComboBox>
+                                    <TextBlock Grid.Column="1"
+                                           Margin="20,0,0,0" VerticalAlignment="Center"
+                                           Style="{StaticResource HelpTextFormat}"
+                                           Text="{Binding SnapshotTimeLimitExplaination}"
+                                           TextWrapping="Wrap"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource LittleTitleTextFormat}">Maximum number of snapshots to maintain</TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="comboBoxSnapshotMaximum" Width="100"
+                                          SelectionChanged="ComboBoxSnapshotSnapshotMaximum_SelectionChanged">
+                                        <ComboBoxItem Content="1 Snapshot" Tag="1"/>
+                                        <ComboBoxItem Content="2 Snapshots" Tag="2"/>
+                                        <ComboBoxItem Content="3 Snapshots" Tag="3"/>
+                                        <ComboBoxItem Content="4 Snapshots" Tag="4"/>
+                                        <ComboBoxItem Content="5 Snapshots" Tag="5"/>
+                                        <ComboBoxItem Content="6 Snapshots" Tag="6"/>
+                                        <ComboBoxItem Content="7 Snapshots" Tag="7"/>
+                                        <ComboBoxItem Content="8 Snapshots" Tag="8"/>
+                                        <ComboBoxItem Content="9 Snapshots" Tag="9"/>
+                                        <ComboBoxItem Content="10 Snapshots" Tag="10"/>
+                                    </ComboBox>
+                                    <TextBlock Margin="20,0,0,0" VerticalAlignment="Center"
+                                           Style="{StaticResource HelpTextFormat}"
+                                           Text="{Binding SnapshotMaximumExplaination}"/>
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <Separator Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" 
+                   VerticalAlignment="Top"/>
+
+        <StackPanel Grid.Column="1" Grid.Row="2" 
+                    Orientation="Horizontal" HorizontalAlignment="Right"
+                    Margin="10">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="120"/>
+                    <Setter Property="Height" Value="28"/>
+                    <Setter Property="Margin" Value="5,0"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="Ok" Click="buttonOk_Click"/>
+            <Button Content="Cancel" Click="buttonCancel_Click"/>
+        </StackPanel>
+
+        <!--<StackPanel Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" HorizontalAlignment="Left"
+                    Margin="10">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="120"/>
+                    <Setter Property="Height" Value="28"/>
+                    <Setter Property="Margin" Value="5,0"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="Advanced" Click="buttonAdvanced_Click"/>
+        </StackPanel>-->
+    </Grid>
+</Window>

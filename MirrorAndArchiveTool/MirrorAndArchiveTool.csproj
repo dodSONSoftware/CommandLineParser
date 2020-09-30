@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{08928DA4-FFC6-4FCF-A74D-0871200C2030}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MirrorAndArchiveTool</RootNamespace>
+    <AssemblyName>MirrorAndArchiveTool</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\Pie-Chart.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="dodSON.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Core Libraries-NET Framework\dodSON.Core\bin\Debug\dodSON.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="dodSON.Core.IonicZip, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Core Libraries-NET Framework\dodSON.Core.FileStorage.IonicZipStore\IonicZipStore\bin\Debug\dodSON.Core.IonicZip.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ArchiveJobDetails.xaml.cs">
+      <DependentUpon>ArchiveJobDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CommonJobDetails.xaml.cs">
+      <DependentUpon>CommonJobDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CopyFiles.xaml.cs">
+      <DependentUpon>CopyFiles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DelegateCommand.cs" />
+    <Compile Include="DeleteJobWindow.xaml.cs">
+      <DependentUpon>DeleteJobWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorArchiveControl.xaml.cs">
+      <DependentUpon>EditorArchiveControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorCommonControl1.xaml.cs">
+      <DependentUpon>EditorCommonControl1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorCommonControls.xaml.cs">
+      <DependentUpon>EditorCommonControls.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorMirrorControl.xaml.cs">
+      <DependentUpon>EditorMirrorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditorWindow.xaml.cs">
+      <DependentUpon>EditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExamineZipWindow.xaml.cs">
+      <DependentUpon>ExamineZipWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExportReportWindow.xaml.cs">
+      <DependentUpon>ExportReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalSettings.cs" />
+    <Compile Include="HeaderSubControl2.xaml.cs">
+      <DependentUpon>HeaderSubControl2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HeaderWindow.xaml.cs">
+      <DependentUpon>HeaderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helper.cs" />
+    <Compile Include="ISubUserControl.cs" />
+    <Compile Include="IValidEditorControl.cs" />
+    <Compile Include="JobDetailsUserControl.xaml.cs">
+      <DependentUpon>JobDetailsUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="JobInformationWindow.xaml.cs">
+      <DependentUpon>JobInformationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MirrorJobDetails.xaml.cs">
+      <DependentUpon>MirrorJobDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pair.cs" />
+    <Compile Include="ReportViewerUserControl2.xaml.cs">
+      <DependentUpon>ReportViewerUserControl2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ReportViewerWindow.xaml.cs">
+      <DependentUpon>ReportViewerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RunWindow.xaml.cs">
+      <DependentUpon>RunWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SnapshotListItem.xaml.cs">
+      <DependentUpon>SnapshotListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SnapshotProcessingWindow.xaml.cs">
+      <DependentUpon>SnapshotProcessingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControl_Editor.xaml.cs">
+      <DependentUpon>SubControl_Editor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControl_Graph1.xaml.cs">
+      <DependentUpon>SubControl_Graph1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControl_History.xaml.cs">
+      <DependentUpon>SubControl_History.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControl_RemovedFiles.xaml.cs">
+      <DependentUpon>SubControl_RemovedFiles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControl_Report.xaml.cs">
+      <DependentUpon>SubControl_Report.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubControl_Snapshots_2.xaml.cs">
+      <DependentUpon>SubControl_Snapshots_2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SubUserControlWindow.xaml.cs">
+      <DependentUpon>SubUserControlWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserSettings.cs" />
+    <Compile Include="ValueConverters\BoolToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\DateToTimeAgo.cs" />
+    <Compile Include="ValueConverters\Int32ToBoolConverter.cs" />
+    <Compile Include="ValueConverters\Int32ToOpacityConverter.cs" />
+    <Compile Include="ValueConverters\Int32ToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\IsArchiveJobToImageConverter.cs" />
+    <Compile Include="ValueConverters\IsEnabledToImageConverter.cs" />
+    <Compile Include="ValueConverters\JobToSuggestedActionIcon.cs" />
+    <Compile Include="ValueConverters\LongToByteSizeConverter.cs" />
+    <Compile Include="ValueConverters\ReportNameToHyperLinkConveter.cs" />
+    <Compile Include="ValueConverters\TimeSpanToStringConverter.cs" />
+    <Compile Include="ProcessingReportWindow.xaml.cs">
+      <DependentUpon>ProcessingReportWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ArchiveJobDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CommonJobDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CopyFiles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DeleteJobWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorArchiveControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorCommonControl1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorCommonControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorMirrorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExamineZipWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExportReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HeaderSubControl2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HeaderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JobDetailsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="JobInformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ArchiveJob.cs" />
+    <Compile Include="ValueConverters\DateLastRanToDisplayStringConverter.cs" />
+    <Compile Include="JobBase.cs" />
+    <Compile Include="JobsListDataTemplateSelector.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="MirrorJobDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReportViewerUserControl2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReportViewerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionaries\DebugResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourceDictionaries\ProductionResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RunWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SnapshotListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SnapshotProcessingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControl_Editor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControl_Graph1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControl_History.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControl_RemovedFiles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControl_Report.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubControl_Snapshots_2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SubUserControlWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProcessingReportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MirrorJob.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\decompress_48_h.ico" />
+    <Resource Include="Images\delete.png" />
+    <Resource Include="Images\forbidden.png" />
+    <Resource Include="Images\note_edit.ico" />
+    <Resource Include="Images\Status-security-high.ico" />
+    <Resource Include="Images\Status-security-low.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\folders.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Status-security-medium.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Actions-dialog-ok-apply.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Status-dialog-error.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\text.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\media_play_green.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\delete2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Status-dialog-information.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BlueSpinner64x64.GIF" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ScrewdriverAndWrench.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DocumentSave.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Pie-Chart.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add.ico" />
+    <Resource Include="Images\arrow_up_blue.ico" />
+    <Resource Include="Images\check.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BlueAdd.ico" />
+    <Resource Include="Images\BlueArrowUp.ico" />
+    <Resource Include="Images\BlueCheck.ico" />
+    <Resource Include="Images\BlueDelete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BlueDocument.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BlueDBSettings.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\BlueFolder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Actions-find.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\document_refresh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\refresh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\document_info.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\garbage_empty.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\gears_preferences.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\disk_blue.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\disks.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\recycle.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\folder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\document_view.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\down_plus.ico" />
+    <Resource Include="Images\up_minus.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

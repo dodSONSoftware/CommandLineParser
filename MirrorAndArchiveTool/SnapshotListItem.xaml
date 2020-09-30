@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="MirrorAndArchiveTool.SnapshotListItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MirrorAndArchiveTool"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <!--STYLES-->
+
+        <Style x:Key="TitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Expander x:Name="TheExpander">
+        
+        <!--HEADER-->
+        
+        <Expander.Header>
+            <Grid HorizontalAlignment="Stretch" Height="30" ToolTip="{Binding ElapsedTimeFromCreation}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <Grid Margin="10,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="75"/>
+                        <ColumnDefinition Width="60"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding NameAsDate, StringFormat=G}" Style="{StaticResource TitleTextFormat}"/>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding ArchivesCountString}"/>
+                    <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding CompressedBytesString}"/>
+                    <TextBlock Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding CompressionPercentageString}"/>
+                </Grid>
+
+                <StackPanel Grid.Column="1" Margin="32,0,10,0" Orientation="Horizontal">
+                    <Button ToolTip="Save Session" Command="{Binding SaveSessionCommand}" CommandParameter="{Binding}" 
+                            Width="24" Height="24">
+                        <Button.Content>
+                            <Image Source="Images\disk_blue.ico"/>
+                        </Button.Content>
+                    </Button>
+                    <Button Margin="7,0,0,0" ToolTip="Delete Session" Command="{Binding DeleteSessionCommand}" CommandParameter="{Binding}"
+                            Width="24" Height="24">
+                        <Button.Content>
+                            <Image Source="Images\delete.png"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+
+                <Separator Margin="0,5,0,0" Grid.Row="1" Grid.ColumnSpan="2"/>
+            </Grid>
+        </Expander.Header>
+        
+        <!--CONTENT-->
+        
+        <Expander.Content>
+            <DataGrid x:Name="dataGridData"
+                  ItemsSource="{Binding Files}" 
+                  IsReadOnly="True"
+                  AutoGenerateColumns="False"
+                  CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="True"
+                  SelectionMode="Extended"
+                  SelectionChanged="DataGridData_SelectionChanged">
+                <DataGrid.ContextMenu>
+                    <ContextMenu Opened="ContextMenu_Opened">
+                        <MenuItem Command="{Binding OpenArchiveCommand}" CommandParameter="{Binding Path=Sessions}" 
+                                  Header="Open Archive"/>
+                        <MenuItem Command="{Binding SaveArchiveCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                  Header="Save Archive"/>
+                        <MenuItem Command="{Binding DeleteArchiveCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                  Header="Delete Archive"/>
+                        <Separator/>
+                        <MenuItem Command="{Binding CopyToClipboardCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                  Header="Copy Path to Clipboard"/>
+                        <MenuItem Command="{Binding CopyFilenameToClipboardCommand}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                  Header="Copy Path and Filename to Clipboard"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date Created" Width="150" Binding="{Binding Path=FileInfo.CreationTime}" SortDirection="Descending"/>
+                    <DataGridTextColumn Header="Total Files" Width="70" Binding="{Binding Path=FilesCount}"/>
+                    <DataGridTextColumn Header="Compressed Size" Width="100" Binding="{Binding Path=CompressedBytesString}"/>
+                    <DataGridTextColumn Header="Uncompressed Size" Width="115" Binding="{Binding Path=UncompressedBytesString}"/>
+                    <DataGridTextColumn Header="Compression %" Width="95" Binding="{Binding Path=CompressionPercentageString}"/>
+                    <DataGridTextColumn Header="Filename" Width="Auto" Binding="{Binding Path=FileInfo.Name}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Expander.Content>
+    </Expander>
+</UserControl>

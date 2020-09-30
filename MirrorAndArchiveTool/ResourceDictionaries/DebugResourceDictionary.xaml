@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <!--Application Information-->
+    <system:Boolean x:Key="AppDebugMode">True</system:Boolean>
+    <system:String x:Key="AppTitle">Archive &amp; Mirror Tool</system:String>
+    <system:String x:Key="AppVersion">M-5 (beta 20200128.1701)</system:String>
+    <system:String x:Key="AppCopyright">Copyright © dodSON Software 2016-2020</system:String>
+    <system:String x:Key="AppEmail">dodSONSoftware@hotmail.com</system:String>
+    <system:String x:Key="AppCommandLineInfo">Run with the command line argument -? to see command line arguments and their uses.</system:String>
+    <system:String x:Key="AppNotice">This software is a beta project, NOT for public use. If you use this software, or even look at it funny, and it does unpleasant things to your computer, that is 100% your problem; the copyright holders will not be held liable for any actions this software performs. The copyright holders recommend NOT using this software.</system:String>
+</ResourceDictionary>

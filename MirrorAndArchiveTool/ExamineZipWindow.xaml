@@ -1,0 +1,291 @@
+﻿<Window x:Class="MirrorAndArchiveTool.ExamineZipWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:chartingToolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+        xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"     
+        Title="{StaticResource AppTitle}" 
+        Height="1000" Width="1600"
+        WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ResizeMode="CanResizeWithGrip" ShowInTaskbar="False"
+        KeyUp="Window_KeyUp">
+    <Window.Resources>
+        <Style x:Key="BorderStandardStyle" TargetType="Border">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style x:Key="ButtonStandardStyle" TargetType="Button">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="26"/>
+        </Style>
+        <Style x:Key="BigTitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Blue"/>
+        </Style>
+        <Style x:Key="LittleTitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="SteelBlue"/>
+        </Style>
+        <Style x:Key="HelpTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="ForestGreen"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="15,0,0,0"/>
+        </Style>
+        <Style x:Key="ButtonGraphSelection" TargetType="ToggleButton">
+            <Setter Property="Margin" Value="0,5,5,0"/>
+            <Setter Property="Padding" Value="20,4"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="85"/>
+            <RowDefinition Height="120"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!---->
+        <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
+               Source="Images\decompress_48_h.ico" Width="64" Height="64" 
+               Margin="0,20,0,0" VerticalAlignment="Top"/>
+        <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
+               Source="Images\Actions-find.ico" Width="50" Height="50" 
+               Margin="35,40,0,0" VerticalAlignment="Top"/>
+
+        <!--open-->
+        <Grid Grid.Column="1" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button HorizontalAlignment="Left"
+                    Style="{StaticResource ButtonStandardStyle}"
+                    Click="buttonOpenZipFile_Click">Open</Button>
+            <TextBlock Grid.Column="1" Grid.Row="0"
+                   Margin="15,0,0,0" VerticalAlignment="Center"
+                   Text="{Binding ZipFilename}"  Style="{StaticResource LittleTitleTextFormat}"/>
+            <TextBlock Grid.Column="1" Grid.Row="0" 
+                   Style="{StaticResource HelpTextFormat}"
+                   Visibility="{Binding TextBoxOpenZipFileStatementVisibility}"
+                   Text="{Binding OpenReportFileStatement}"/>
+        </Grid>
+
+        <!--zip file statistics-->
+        <Border Grid.Column="1" Grid.Row="1"
+                BorderBrush="Black" BorderThickness="1" CornerRadius="0">
+            <StackPanel Orientation="Vertical" Margin="10,0,0,0">
+                <StackPanel.Resources>
+                    <Style x:Key="ZipStatsBigText" TargetType="TextBlock">
+                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                    </Style>
+                    <Style x:Key="ZipStatsNormalText" TargetType="TextBlock">
+                        <Setter Property="Margin" Value="5,0,0,0"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                </StackPanel.Resources>
+
+                <TextBlock Style="{StaticResource BigTitleTextFormat}">Zip File Statistics</TextBlock>
+                <StackPanel x:Name="ZipFileStatisticsPanel" Orientation="Horizontal">
+
+                    <StackPanel Orientation="Vertical" Width="250">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource ZipStatsBigText}">Total Extensions:</TextBlock>
+                            <TextBlock Style="{StaticResource ZipStatsNormalText}" x:Name="textBlockZipFileStatsTotalExtensions"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource ZipStatsBigText}">Total Files:</TextBlock>
+                            <TextBlock Style="{StaticResource ZipStatsNormalText}" x:Name="textBlockZipFileStatsTotalFiles"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource ZipStatsBigText}">Uncompressed Size:</TextBlock>
+                            <TextBlock Style="{StaticResource ZipStatsNormalText}" Margin="5,0,0,0" Text="{Binding ZipFileStats.UncompressedSizeString}"/>
+                            <TextBlock Style="{StaticResource ZipStatsNormalText}" x:Name="textBlockZipFileStatsUncompressedSize"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource ZipStatsBigText}">Compressed Size:</TextBlock>
+                            <TextBlock Style="{StaticResource ZipStatsNormalText}" Margin="22,0,0,0" Text="{Binding ZipFileStats.CompressedSizeString}"/>
+                            <TextBlock Style="{StaticResource ZipStatsNormalText}" x:Name="textBlockZipFileStatsCompressedSize"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource ZipStatsBigText}">Compression:</TextBlock>
+                            <TextBlock Style="{StaticResource ZipStatsNormalText}" Margin="53,0,0,0" x:Name="textBlockZipFileStatsCompressionPercentage"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!--Extensions to Store-->
+        <Border Grid.Column="1" Grid.Row="2"
+                Style="{StaticResource BorderStandardStyle}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource BigTitleTextFormat}">File Extensions to Store</TextBlock>
+                    <TextBlock Style="{StaticResource HelpTextFormat}">Displays file extensions which have compression percentages less than the selected compression precentage</TextBlock>
+                </StackPanel>
+                <DockPanel DockPanel.Dock="Bottom">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="35"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Height="26"
+                                Click="buttonAddToSettings">Add to Settings</Button>
+                        <TextBlock Grid.Column="1" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                                   Margin="5,0,0,0"
+                                   Text="{Binding CompressionRationSliderValueTextBox}"/>
+                        <Slider Grid.Column="2"
+                                Margin="5,5" DockPanel.Dock="Bottom" x:Name="sliderCompressionRatio"
+                                Minimum="0" Maximum="1" Value="{Binding CompressionRatioSliderValue}"
+                                ValueChanged="sliderCompressionRatio_ValueChanged"
+                                SmallChange="0.01" LargeChange="0.1" TickPlacement="BottomRight" TickFrequency="0.01" IsSnapToTickEnabled="True"/>
+                    </Grid>
+                </DockPanel>
+                <TextBox x:Name="textBoxExtensionsToStore"
+                         Text="{Binding ExtensionsToStore}"
+                         TextWrapping="Wrap"/>
+            </DockPanel>
+        </Border>
+
+        <!--chart-->
+        <Grid Grid.Column="1" Grid.Row="3" 
+              x:Name="ChartGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="4*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="10,10">
+                    <TextBlock Style="{StaticResource BigTitleTextFormat}">Compression Percentages by File Extensions</TextBlock>
+                    <TextBlock Style="{StaticResource HelpTextFormat}">Displays the compression percentage for each file extension</TextBlock>
+                </StackPanel>
+                <Grid Grid.Row="1">
+                    <!--chart: Compression Percentages-->
+                    <charting:Chart x:Name="chart" 
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <charting:Chart.Series>
+                            <charting:ColumnSeries ItemsSource="{Binding Path=ProgressRatios}"
+                                               DependentValuePath="Value" 
+                                               IndependentValuePath="Key"
+                                               IsSelectionEnabled="False"
+                                               Title="Compression %"/>
+                        </charting:Chart.Series>
+                    </charting:Chart>
+                    <!--working icon-->
+                    <Image x:Name="imageRecommendationWaitIcon" Source="Images\BlueSpinner64x64.GIF" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Width="64" Height="64"
+                               Visibility="{Binding ImageWorkingIconVisiblity}">
+                        <Image.RenderTransform>
+                            <RotateTransform x:Name="renderTransform" CenterX="32" CenterY="32"/>
+                        </Image.RenderTransform>
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard x:Name="AnimationTrigger">
+                                    <Storyboard x:Name="storyBoardRecommendedIconAnimation">
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                                           Duration="0:0:12" SpeedRatio="10"
+                                                                           RepeatBehavior="Forever">
+                                            <DiscreteDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+                                            <DiscreteDoubleKeyFrame Value="30" KeyTime="0:0:1"/>
+                                            <DiscreteDoubleKeyFrame Value="60" KeyTime="0:0:2"/>
+                                            <DiscreteDoubleKeyFrame Value="90" KeyTime="0:0:3"/>
+                                            <DiscreteDoubleKeyFrame Value="120" KeyTime="0:0:4"/>
+                                            <DiscreteDoubleKeyFrame Value="150" KeyTime="0:0:5"/>
+                                            <DiscreteDoubleKeyFrame Value="180" KeyTime="0:0:6"/>
+                                            <DiscreteDoubleKeyFrame Value="210" KeyTime="0:0:7"/>
+                                            <DiscreteDoubleKeyFrame Value="240" KeyTime="0:0:8"/>
+                                            <DiscreteDoubleKeyFrame Value="270" KeyTime="0:0:9"/>
+                                            <DiscreteDoubleKeyFrame Value="300" KeyTime="0:0:10"/>
+                                            <DiscreteDoubleKeyFrame Value="330" KeyTime="0:0:11"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                </Grid>
+            </Grid>
+
+            <GridSplitter Grid.Row="1" Height="8" HorizontalAlignment="Stretch"/>
+
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel x:Name="ToggleButtonContainer" Orientation="Horizontal">
+                    <ToggleButton x:Name="toggleButtonKilobytes" Style="{StaticResource ButtonGraphSelection}" Command="{Binding ShowKilobytes}" IsChecked="True">Kilobytes by File Extensions</ToggleButton>
+                    <ToggleButton x:Name="toggleButtonCount" Style="{StaticResource ButtonGraphSelection}" Command="{Binding ShowCount}" IsChecked="False">Count by File Extensions</ToggleButton>
+                    <TextBlock Style="{StaticResource HelpTextFormat}" Text="{Binding ButtonExplainationText}"/>
+                </StackPanel>
+                <Grid Grid.Row="1" x:Name="Chart_Kilobytes">
+                    <charting:Chart x:Name="chart2"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <charting:Chart.Series>
+                            <charting:ColumnSeries ItemsSource="{Binding Path=UncompressedSizes}"
+                                             DependentValuePath="Value" 
+                                             IndependentValuePath="Key"
+                                             IsSelectionEnabled="False"
+                                             Title="Uncompressed"/>
+                            <charting:ColumnSeries ItemsSource="{Binding Path=CompressedSizes}"
+                                             DependentValuePath="Value" 
+                                             IndependentValuePath="Key"
+                                             IsSelectionEnabled="False"
+                                             Title="Compressed"/>
+                        </charting:Chart.Series>
+                    </charting:Chart>
+                </Grid>
+                <Grid Grid.Row="1" x:Name="Chart_Count"
+                      Visibility="Hidden">
+                    <charting:Chart x:Name="chart3"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <charting:Chart.Series>
+                            <charting:AreaSeries ItemsSource="{Binding Path=Count}"
+                                                   DependentValuePath="Value" 
+                                                   IndependentValuePath="Key"
+                                                   IsSelectionEnabled="False"
+                                                   Title="Count"/>
+                        </charting:Chart.Series>
+                    </charting:Chart>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Separator Grid.Column="1" Grid.Row="4"
+                   VerticalAlignment="Top"/>
+        <Grid Grid.Column="1" Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1"
+                        Margin="15"
+                        Width="120" Height="35"
+                        Click="ButtonClose_Click">
+                Close
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

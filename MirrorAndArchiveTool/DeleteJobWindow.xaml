@@ -1,0 +1,322 @@
+﻿<Window x:Class="MirrorAndArchiveTool.DeleteJobWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MirrorAndArchiveTool"
+        mc:Ignorable="d"
+        Title="{StaticResource AppTitle}" 
+        Height="540" Width="640"
+        MinHeight="540" MinWidth="640"
+        WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ResizeMode="CanResizeWithGrip" ShowInTaskbar="False"
+        Closed="Window_Closed"
+        KeyUp="Window_KeyUp"
+        Loaded="Window_Loaded">
+
+    <!--RESOURCES-->
+    <Window.Resources>
+        <Style x:Key="BorderStandardStyle" TargetType="Border">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style x:Key="ButtonBigStyle" TargetType="Button">
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="Height" Value="32"/>
+        </Style>
+        <Style x:Key="ButtonStandardStyle" TargetType="Button">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="26"/>
+        </Style>
+        <Style x:Key="ButtonSmallStyle" TargetType="Button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,5,10,0"/>
+            <Setter  Property="FontSize" Value="11"/>
+        </Style>
+        <Style x:Key="WindowTitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="DarkOrchid"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="BigTitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Blue"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="LittleTitleTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="SteelBlue"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="HelpTextFormat" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="ForestGreen"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="15,0,0,0"/>
+        </Style>
+        <Style x:Key="NormalBigText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="NormalText" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <!--UI-->
+    <Grid>
+        <!--columns and rows definitions-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--IMAGE-->
+        <!--<Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
+               Source="Images\garbage_empty.ico" Width="64" Height="64" 
+               Margin="0,20,0,0" VerticalAlignment="Top"/>-->
+
+        <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!--working icon-->
+            <Image x:Name="imageRecommendationWaitIcon" Source="Images\BlueSpinner64x64.GIF" 
+                   Grid.Column="0" Grid.Row="0"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Width="80" Height="80" 
+                   Visibility="{Binding ImageWorkingIconVisiblity}">
+                <Image.RenderTransform>
+                    <RotateTransform x:Name="renderTransform" CenterX="40" CenterY="40"/>
+                </Image.RenderTransform>
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard x:Name="AnimationTrigger">
+                            <Storyboard x:Name="storyBoardRecommendedIconAnimation">
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                               Duration="0:0:12" SpeedRatio="10"
+                                                               RepeatBehavior="Forever">
+                                    <DiscreteDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+                                    <DiscreteDoubleKeyFrame Value="30" KeyTime="0:0:1"/>
+                                    <DiscreteDoubleKeyFrame Value="60" KeyTime="0:0:2"/>
+                                    <DiscreteDoubleKeyFrame Value="90" KeyTime="0:0:3"/>
+                                    <DiscreteDoubleKeyFrame Value="120" KeyTime="0:0:4"/>
+                                    <DiscreteDoubleKeyFrame Value="150" KeyTime="0:0:5"/>
+                                    <DiscreteDoubleKeyFrame Value="180" KeyTime="0:0:6"/>
+                                    <DiscreteDoubleKeyFrame Value="210" KeyTime="0:0:7"/>
+                                    <DiscreteDoubleKeyFrame Value="240" KeyTime="0:0:8"/>
+                                    <DiscreteDoubleKeyFrame Value="270" KeyTime="0:0:9"/>
+                                    <DiscreteDoubleKeyFrame Value="300" KeyTime="0:0:10"/>
+                                    <DiscreteDoubleKeyFrame Value="330" KeyTime="0:0:11"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
+            <Image Grid.Column="0" Grid.Row="0"
+                   Source="Images\garbage_empty.ico" Stretch="Fill"
+                   Width="80" Height="80" 
+                   VerticalAlignment="Top" HorizontalAlignment="Left"
+                   Margin="20,20,0,0" 
+                   Visibility="{Binding ImageWorkingIconReverseVisiblity}"/>
+        </Grid>
+
+        <!--UI-->
+        <Grid Grid.Column="1" Margin="0,15,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!--Header-->
+            <StackPanel Grid.Row="0">
+                <StackPanel Margin="0,0,0,-2" Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource WindowTitleTextFormat}">Delete</TextBlock>
+                    <TextBlock Style="{StaticResource WindowTitleTextFormat}" Margin="8,0" Text="{Binding JobTypeTitle}"/>
+                    <TextBlock Style="{StaticResource WindowTitleTextFormat}">Job</TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource NormalBigText}">Job Name:</TextBlock>
+                    <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding Job.Name}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource NormalBigText}">Date Created:</TextBlock>
+                    <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding Job.DateCreate}"/>
+                    <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding Job.Age}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!--SEPARATOR-->
+            <Separator Grid.Row="1" Margin="0,15,0,15"/>
+
+            <!--REPORTS-->
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource BigTitleTextFormat}">Reports</TextBlock>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Style="{StaticResource ButtonSmallStyle}" Command="{Binding BrowseReportsCommand}">Open Reports</Button>
+                    <Button Style="{StaticResource ButtonSmallStyle}" Command="{Binding DeleteReportsCommand}">Delete Reports</Button>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Count:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding Reports.ListCount}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Dates:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding Reports.DateRange}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <!--REMOVED ARCHIVES-->
+            <Grid Grid.Row="3" Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource BigTitleTextFormat}">Removed Archives</TextBlock>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Style="{StaticResource ButtonSmallStyle}" Command="{Binding BrowseRemovedArchivesCommand}">Open Archives</Button>
+                    <Button Style="{StaticResource ButtonSmallStyle}" Command="{Binding DeleteRemovedArchivesCommand}">Delete Archives</Button>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Count:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding RemovedArchives.ListCount}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Dates:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding RemovedArchives.DateRange}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Size:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding RemovedArchives.SizeStr}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <!--SNAPSHOTS-->
+            <Grid Grid.Row="4" Margin="0,10,0,0"
+                  Visibility="{Binding HasSnapshotsVisibility}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{StaticResource BigTitleTextFormat}">Snapshots</TextBlock>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Style="{StaticResource ButtonSmallStyle}" Command="{Binding BrowseSnapshotsCommand}">Open Snapshots</Button>
+                    <Button Style="{StaticResource ButtonSmallStyle}" Command="{Binding DeleteSnapshotsCommand}">Delete Snapshots</Button>
+                </StackPanel>
+
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Count:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding Snapshots.SessionsCountString}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Dates:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding Snapshots.DateRange}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Size:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding Snapshots.SizeStr}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+            <!--The JOB Itself-->
+            <Grid Grid.Row="5" Margin="0,10,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource BigTitleTextFormat}">Job Files,</TextBlock>
+                    <TextBlock Style="{StaticResource BigTitleTextFormat}" Margin="5,0" Text="{Binding JobTypeTitle}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Style="{StaticResource ButtonSmallStyle}" Command="{Binding BrowseJobInfoCommand}">Open Job Files</Button>
+                    <Button Style="{StaticResource ButtonSmallStyle}" Command="{Binding DeleteJobInfoCommand}">Delete Job Files</Button>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource NormalBigText}">Size:</TextBlock>
+                        <TextBlock Style="{StaticResource NormalText}" Margin="5,2,0,0" Text="{Binding JobFilesSizeStr}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!--Separator-->
+        <Separator Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" 
+                   VerticalAlignment="Top"
+                   Margin="0,20,0,0"/>
+
+        <StackPanel Grid.Column="1" Grid.Row="1"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                    Margin="0,0,15,10">
+            <!--Close Button-->
+            <Button Style="{StaticResource ButtonBigStyle}"
+                    Margin="0,0,15,0"
+                    Command="{Binding DeleteAllCommand}">
+                <StackPanel Margin="0,0,0,-2" Orientation="Horizontal">
+                    <TextBlock>Delete</TextBlock>
+                    <TextBlock Margin="5,0" Text="{Binding JobTypeTitle}"/>
+                    <TextBlock>Job</TextBlock>
+                </StackPanel>
+            </Button>
+            <!--Close Button-->
+            <Button Style="{StaticResource ButtonBigStyle}"
+                    Command="{Binding CloseCommand}">Close</Button>
+        </StackPanel>
+    </Grid>
+</Window>
